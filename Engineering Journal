@@ -1,0 +1,65 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[german]{babel}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{datetime}
+\usepackage{tabularx}
+
+% Set page margins
+\geometry{margin=1in}
+
+% Define the document title and author
+\title{Engineering Journal}
+\author{Your Name}
+
+% Define a new environment for the daily log
+\newenvironment{dailylog}[1]{
+    \newpage % Start each daily log on a new page
+    \maketitle
+    \section*{Daily Log - #1}
+    \begin{enumerate}[label=\textbf{\arabic*.}]
+}{
+    \end{enumerate}
+}
+
+\begin{document}
+
+\begin{dailylog}{16.11.2023}
+    \item \textbf{Problems and Solutions:}
+    \begin{center}
+        \begin{tabularx}{\textwidth}{|X|X|}
+            \hline
+            \textbf{Problems} & \textbf{Solutions} \\
+            \hline
+            Problem 1 & Solution 1 \\
+            \hline
+            Problem 2 & Solution 2 \\
+            \hline
+            Problem 3 & Solution 3 \\
+            \hline
+        \end{tabularx}
+    \end{center}
+    
+    \item \textbf{Challenges Encountered:}
+    \begin{itemize}
+        \item Challenge 1
+        \item Challenge 2
+    \end{itemize}
+    
+    \item \textbf{Notes:}
+    \begin{itemize}
+        \item Any additional notes or observations.
+    \end{itemize}
+    
+    \item \textbf{Next Steps:}
+    \item \textbf{Next Steps:}
+\begin{itemize}
+    \item Next task or set of tasks to be performed.
+\end{itemize}
+
+\end{dailylog}
+
+% Add more daily logs as needed
+
+\end{document}
