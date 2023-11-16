@@ -11,7 +11,7 @@
 
 % Define the document title and author
 \title{Engineering Journal}
-\author{Your Name}
+\author{Jan Nguyen  & Hugo Peinemann}
 
 % Define a new environment for the daily log
 \newenvironment{dailylog}[1]{
