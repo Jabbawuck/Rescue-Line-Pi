@@ -21,11 +21,12 @@
     \begin{enumerate}[label=\textbf{\arabic*.}]
 }{
     \end{enumerate}
+    \vspace{\fill}
 }
 
 \begin{document}
 
-\begin{dailylog}{16.11.2023}
+\begin{dailylog}{Datum}
     \item \textbf{Problems and Solutions:}
     \begin{center}
         \begin{tabularx}{\textwidth}{|X|X|}
@@ -53,11 +54,11 @@
     \end{itemize}
     
     \item \textbf{Next Steps:}
-    \item \textbf{Next Steps:}
-\begin{itemize}
-    \item Next task or set of tasks to be performed.
-\end{itemize}
-
+    \begin{itemize}
+        \item Next task or set of tasks to be performed.
+    \end{itemize}
+    \vspace{\fill}
+    \textbf{Entered by }
 \end{dailylog}
 
 % Add more daily logs as needed
