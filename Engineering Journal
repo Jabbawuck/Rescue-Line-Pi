@@ -11,7 +11,7 @@
 
 % Define the document title and author
 \title{Engineering Journal}
-\author{Jan Nguyen  & Hugo Peinemann}
+\author{Your Name}
 
 % Define a new environment for the daily log
 \newenvironment{dailylog}[1]{
@@ -26,14 +26,14 @@
 
 \begin{document}
 
-\begin{dailylog}{Datum}
+\begin{dailylog}{25.11.23}
     \item \textbf{Problems and Solutions:}
     \begin{center}
         \begin{tabularx}{\textwidth}{|X|X|}
             \hline
             \textbf{Problems} & \textbf{Solutions} \\
             \hline
-            Problem 1 & Solution 1 \\
+            Missing files for classes and their methods & Created files for classes and their functions \\
             \hline
             Problem 2 & Solution 2 \\
             \hline
@@ -41,24 +41,19 @@
             \hline
         \end{tabularx}
     \end{center}
-    
-    \item \textbf{Challenges Encountered:}
-    \begin{itemize}
-        \item Challenge 1
-        \item Challenge 2
-    \end{itemize}
+
     
     \item \textbf{Notes:}
     \begin{itemize}
-        \item Any additional notes or observations.
+        \item Arduino files need to be placed in a sketch folder
     \end{itemize}
     
     \item \textbf{Next Steps:}
     \begin{itemize}
-        \item Next task or set of tasks to be performed.
+        \item Creating a framework for classes
     \end{itemize}
     \vspace{\fill}
-    \textbf{Entered by }
+    \textbf{Entered by Hugo Peinemann}
 \end{dailylog}
 
 % Add more daily logs as needed
