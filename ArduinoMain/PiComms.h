@@ -6,8 +6,13 @@ class PiComms
 {
 public:
     void begin();
-    void read();
+    char[] read();
     void write();
+private:
+    bool _connected;
+    int _msgLength;
+    char[] receivedMsg;
+    char[] sendMsg;
 };
 
 #endif
