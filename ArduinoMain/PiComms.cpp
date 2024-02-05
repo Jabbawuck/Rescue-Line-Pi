@@ -1,35 +1,34 @@
-#include "Arduino.h"
 #include "PiComms.h"
 
 PiComms::PiComms()
 {
-    bool _connected = false;
-    int _msgLength;
-    char[] receivedMsg;
-    char[] sendMSG;
+    _connected = false;
+    _msgLength = 5;
 }
 
 void PiComms::begin()
 {
     Serial.begin(19200);
-    while(_connected != true){
+    while (!_connected)
+    {
         if (Serial.available() > 0)
         {
             _connected = true;
-            _msgLength = Serial.Read();
+            _msgLength = Serial.read();
         }
-        
     }
 }
 
-char[] PiComms::read()
+char PiComms::read(char* buffer, int bufferSize)
 {
-    Serial.readBytesUntil("\n", receivedMsg);
-    return receivedMsg;
+    Serial.readBytesUntil('\n', buffer, bufferSize);
+    return buffer[5];
 }
 
-void PiComms::write()
+void PiComms::write(const char* sendMsg)
 {
-    if(sendMsg.length < Serial.availableForWrite())
-    Serial.write(sendMsg);
+    if (strlen(sendMsg) < Serial.availableForWrite())
+    {
+        Serial.write(sendMsg, strlen(sendMsg));
+    }
 }
