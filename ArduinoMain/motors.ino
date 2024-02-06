@@ -2,6 +2,11 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
+
+//für BNO055 Sensor 
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <utility/imumaths.h>
 /////////////////////////////////////////////////////
 //motorenpins
 int motorR1 = A1;
@@ -11,6 +16,7 @@ int motorL2 = A4;
 
 int defaultSpeed = 50 //Geschwindigkeit 0% bis 100%
 /////////////////////////////////////////////////////
+//[allg. Motoren]/// 
 
 void startMotors(){
   pinMode(motorR1, OUTPUT);
@@ -54,7 +60,9 @@ void stop(){
   digitalWrite(motorL2, LOW);
 }
 
-//////////[Motorentest]//////////////////////////
+//////////////////////////////////////////////
+//[Motorentest]///
+
 void motorentest(){
   forward(1000, defaultSpeed);
   stop(1000);
@@ -66,13 +74,32 @@ void motorentest(){
   backwards(1000, defaultSpeed);
 }
 //////////////////////////////////////////////  
+//[allg. Gyro]///
+
+void readOrientation(){
+  sensors_event_t orientationData , angVelocityData , linearAccelData; //Winkeldaten
+  bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
+
+  yawAngle =orientationData.orientation.x;
+  pitchAngle = map(orientationData.orientation.y, 100, 0, -100, 0);
+  rollAngle = orientationData.orientation.z;
+
+  bno.getEvent(&linearAccelData, Adafruit_BNO055::VECTOR_LINEARACCEL);//Beschleunigungsdaten
+  xAccel = linearAccelData.acceleration.x * 100;
+  yAccel = linearAccelData.acceleration.y * 100;
+  zAccel = linearAccelData.acceleration.z * 100;
+
+}
+///////////////////////////////////////////////
 
 void setup(){
   Serial.begin(9600);
   startMotors();
+  !bno.begin();
 }
 
 void loop(){
+  readOrientation();
   motorentest();
 }
   
