@@ -13,6 +13,13 @@ int motorL1 = A3;
 int motorL2 = A4;
 /////////////////////////////////////////////////////
 
+void startMotors(){
+  pinMode(motorR1, OUTPUT);
+  pinMode(motorR2, OUTPUT);
+  pinMode(motorL1, OUTPUT);
+  pinMode(motorL2, OUTPUT);
+}
+
 void forward(){
   digitalWrite(motorR1, HIGH);
   digitalWrite(motorR2, LOW);
@@ -61,5 +68,9 @@ void motorentest(){
 }
 //////////////////////////////////////////////  
 
-  
+void loop(){
+  startMotors();
+  delay(1500);
+  motorentest();
+}
   
