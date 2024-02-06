@@ -3,14 +3,13 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 /////////////////////////////////////////////////////
-
-
-
 //motorenpins
 int motorR1 = A1;
 int motorR2 = A2;
 int motorL1 = A3;
 int motorL2 = A4;
+
+int defaultSpeed = 50 //Geschwindigkeit 0% bis 100%
 /////////////////////////////////////////////////////
 
 void startMotors(){
@@ -57,20 +56,23 @@ void stop(){
 
 //////////[Motorentest]//////////////////////////
 void motorentest(){
-  forward(1000);
+  forward(1000, defaultSpeed);
   stop(1000);
-  right(90);
-  forward(1000);
+  right(90, defaultSpeed);
+  forward(1000, defaultSpeed);
   stop(1000);
-  backwards(1000);
-  left(90);
-  backwards(1000);
+  backwards(1000, defaultSpeed);
+  left(90, defaultSpeed);
+  backwards(1000, defaultSpeed);
 }
 //////////////////////////////////////////////  
 
-void loop(){
+void setup(){
+  Serial.begin(9600);
   startMotors();
-  delay(1500);
+}
+
+void loop(){
   motorentest();
 }
   
