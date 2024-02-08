@@ -13,6 +13,8 @@ int motorR1 = A1;
 int motorR2 = A2;
 int motorL1 = A3;
 int motorL2 = A4;
+int motorSpeedPinR = A0;
+int motorSpeedPinL = A5;
 
 int defaultSpeed = 50 //Geschwindigkeit 0% bis 100%
 /////////////////////////////////////////////////////
@@ -23,34 +25,48 @@ void startMotors(){
   pinMode(motorR2, OUTPUT);
   pinMode(motorL1, OUTPUT);
   pinMode(motorL2, OUTPUT);
+  pinMode(motorSpeedPinL, OUTPUT);
+  pinMode(motorSpeedPinR, OUTPUT);
 }
 
-void forward(){
+void forward(int time, int speed){
+  analogWrite(motorSpeedPinL, map(speed, 0, 100, 0, 255));
+  analogWrite(motorSpeedPinR, map(speed, 0, 100, 0, 255));
   digitalWrite(motorR1, HIGH);
   digitalWrite(motorR2, LOW);
   digitalWrite(motorL1, HIGH);
   digitalWrite(motorL2, LOW);
+  delay(time);
 }
 
-void backward(){
+void backward(int time, int speed){
+  analogWrite(motorSpeedPinL, map(speed, 0, 100, 0, 255));
+  analogWrite(motorSpeedPinR, map(speed, 0, 100, 0, 255));
   digitalWrite(motorR1, LOW);
   digitalWrite(motorR2, HIGH);
   digitalWrite(motorL1, LOW);
   digitalWrite(motorL2, HIGH);
+  delay(time);
 }
 
-void right(){
-  digitalWrite(motorR1, LOW);
-  digitalWrite(motorR2, HIGH);
-  digitalWrite(motorL1, HIGH);
-  digitalWrite(motorL2, LOW);
-}
-
-void left(){
+void left(int time, int speed){
+  analogWrite(motorSpeedPinR, map(speed, 0, 100, 0, 255));
+  analogWrite(motorSpeedPinL, map(speed, 0, 100, 0, 255));
   digitalWrite(motorR1, HIGH);
   digitalWrite(motorR2, LOW);
   digitalWrite(motorL1, LOW);
-  digitalWrite(motorL2, HIGH);
+  digitalWrite(motorL2, LOW);
+  delay(time);
+}
+
+void right(int time, int speed){
+  analogWrite(motorspeedPin1, map(speed, 0, 100, 0, 255));
+  analogWrite(motorspeedPin2, map(speed, 0, 100, 0, 255));
+  digitalWrite(motorR1, LOW);
+  digitalWrite(motorR2, LOW);
+  digitalWrite(motorL1, HIGH);
+  digitalWrite(motorL2, LOW);
+  delay(time);
 }
 
 void stop(){
@@ -74,8 +90,8 @@ void motorentest(){
   backwards(1000, defaultSpeed);
 }
 //////////////////////////////////////////////  
-//[allg. Gyro]///
-
+//[allg. Gyro]//
+/*
 void readOrientation(){
   sensors_event_t orientationData , angVelocityData , linearAccelData; //Winkeldaten
   bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
@@ -89,17 +105,17 @@ void readOrientation(){
   yAccel = linearAccelData.acceleration.y * 100;
   zAccel = linearAccelData.acceleration.z * 100;
 
-}
+}*/
 ///////////////////////////////////////////////
 
 void setup(){
   Serial.begin(9600);
   startMotors();
-  !bno.begin();
+  //!bno.begin();
 }
 
 void loop(){
-  readOrientation();
+  //readOrientation();
   motorentest();
 }
   
