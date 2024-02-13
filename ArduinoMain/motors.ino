@@ -16,7 +16,7 @@ int motorL2 = A4;
 int motorSpeedPinR = A0;
 int motorSpeedPinL = A5;
 
-int defaultSpeed = 50 //Geschwindigkeit 0% bis 100%
+int defaultSpeed = 50; //Geschwindigkeit 0% bis 100%
 /////////////////////////////////////////////////////
 //[allg. Motoren]/// 
 
@@ -60,8 +60,8 @@ void left(int time, int speed){
 }
 
 void right(int time, int speed){
-  analogWrite(motorspeedPin1, map(speed, 0, 100, 0, 255));
-  analogWrite(motorspeedPin2, map(speed, 0, 100, 0, 255));
+  analogWrite(motorSpeedPinR, map(speed, 0, 100, 0, 255));
+  analogWrite(motorSpeedPinL, map(speed, 0, 100, 0, 255));
   digitalWrite(motorR1, LOW);
   digitalWrite(motorR2, LOW);
   digitalWrite(motorL1, HIGH);
@@ -69,11 +69,12 @@ void right(int time, int speed){
   delay(time);
 }
 
-void stop(){
+void stop(int time){
   digitalWrite(motorR1, LOW);
   digitalWrite(motorR2, LOW);
   digitalWrite(motorL1, LOW);
   digitalWrite(motorL2, LOW);
+  delay(time);
 }
 
 //////////////////////////////////////////////
@@ -85,9 +86,9 @@ void motorentest(){
   right(90, defaultSpeed);
   forward(1000, defaultSpeed);
   stop(1000);
-  backwards(1000, defaultSpeed);
+  backward(1000, defaultSpeed);
   left(90, defaultSpeed);
-  backwards(1000, defaultSpeed);
+  backward(1000, defaultSpeed);
 }
 //////////////////////////////////////////////  
 //[allg. Gyro]//
