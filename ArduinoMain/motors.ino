@@ -77,6 +77,17 @@ void stop(int time){
   delay(time);
 }
 
+void smoothDrive(int speed, int direction){
+  analogWrite(motorSpeedPinR, map(direction, 90, -90, 1, 255));
+  analogWrite(motorSpeedPinL, map(direction, -90, 90, 1, 255));
+  digitalWrite(motorR1, HIGH);
+  digitalWrite(motorR2, LOW);
+  digitalWrite(motorL1, HIGH);
+  digitalWrite(motorL2, LOW);
+  Serial.print(map(direction, 90, -90, 0, 255));
+  Serial.print(map(direction, -90, 90, 0, 255));
+}
+
 //////////////////////////////////////////////
 //[Motorentest]///
 
@@ -117,6 +128,14 @@ void setup(){
 
 void loop(){
   //readOrientation();
-  motorentest();
+  smoothDrive(100, 0);
+  Serial.print("straight \n");
+  delay(2000);
+  smoothDrive(100, -90);
+  Serial.print("left \n");
+  delay(2000);
+  smoothDrive(100, 90);
+  Serial.print("right \n");
+  delay(2000);
 }
   
