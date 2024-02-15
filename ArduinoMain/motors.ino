@@ -9,12 +9,12 @@
 #include <utility/imumaths.h>
 /////////////////////////////////////////////////////
 //motorenpins
-int motorR1 = A1;
-int motorR2 = A2;
-int motorL1 = A3;
-int motorL2 = A4;
-int motorSpeedPinR = A0;
-int motorSpeedPinL = A5;
+int motorR1 = 7;
+int motorR2 = 8;
+int motorL1 = 9;
+int motorL2 = 10;
+int motorSpeedPinR = 5;
+int motorSpeedPinL = 6;
 
 int defaultSpeed = 50; //Geschwindigkeit 0% bis 100%
 /////////////////////////////////////////////////////
@@ -128,14 +128,6 @@ void setup(){
 
 void loop(){
   //readOrientation();
-  smoothDrive(100, 0);
-  Serial.print("straight \n");
-  delay(2000);
-  smoothDrive(100, -90);
-  Serial.print("left \n");
-  delay(2000);
-  smoothDrive(100, 90);
-  Serial.print("right \n");
-  delay(2000);
+  smoothDrive(defaultSpeed, goalDirection);
 }
   
