@@ -1,15 +1,33 @@
 import cv2
 import numpy as np
-from picamera import PiCamera
-from time import sleep
+import Picamera2
+import os
+from libcamera import controls
+import time
 
-camera.start_preview()
-camera.start_recording('/home/pi/Desktop/video.h264')
-sleep(5)
-camera.stop_recording()
-camera.stop_preview()
 
-def track_black_line():
+#Disable libcamera and Picamera2 logging
+Picamera2.set_logging(Picamera2.ERROR)
+os.environ["LIBCAMERA_LOG_LEVELS"] = "4"
+
+camera_x = 640
+camera_y = 480
+
+camera = Picamera2()
+
+mode =camera.sensor_modes[0]
+camera.configure(camera.create_video_configuration(sensor={'output_size': mode['size'], 'bit_depth': mode['bit_depth']}))
+
+camera.start()
+camera.set_controls({"AfMode": controls.AfModeEnum.Manual, "LensPosition": 6.5 , "FrameDurationLimits": (1000000 // 50, 1000000 // 50)})
+time.sleep(0.1)
+
+while True: 
+    raw_capture = camera.capture_array()
+    #raw_capture = cv2.resize(raw_capture, (camera_x, camera_y))
+    cv2_img = cv2.cvtColor(raw_capture, cv2.COLOR_RGB2BGR)
+
+''' def track_black_line():
    
     cap = cv2.VideoCapture(0)
 
@@ -43,3 +61,4 @@ def track_black_line():
 
 if __name__ == "__main__":
     track_black_line()
+'''
