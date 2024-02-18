@@ -17,6 +17,7 @@ int motorSpeedPinR = 5;
 int motorSpeedPinL = 6;
 
 int defaultSpeed = 50; //Geschwindigkeit 0% bis 100%
+int topSpeed = 150; //Maximalgeschwindigkeit
 /////////////////////////////////////////////////////
 //[allg. Motoren]/// 
 
@@ -78,14 +79,14 @@ void stop(int time){
 }
 
 void smoothDrive(int speed, int direction){
-  analogWrite(motorSpeedPinR, map(direction, 90, -90, 1, 255));
-  analogWrite(motorSpeedPinL, map(direction, -90, 90, 1, 255));
+  analogWrite(motorSpeedPinR, map(direction, 90, -90, 0, topSpeed));
+  analogWrite(motorSpeedPinL, map(direction, -90, 90, 0, topSpeed));
   digitalWrite(motorR1, HIGH);
   digitalWrite(motorR2, LOW);
   digitalWrite(motorL1, HIGH);
   digitalWrite(motorL2, LOW);
-  Serial.print(map(direction, 90, -90, 0, 255));
-  Serial.print(map(direction, -90, 90, 0, 255));
+  //Serial.print(map(direction, 90, -90, 0, 255));
+  //Serial.print(map(direction, -90, 90, 0, 255));
 }
 
 //////////////////////////////////////////////
@@ -128,6 +129,13 @@ void setup(){
 
 void loop(){
   //readOrientation();
-  smoothDrive(defaultSpeed, goalDirection);
+  if (Serial.available() > 0) {
+        String data = Serial.readStringUntil('\n');
+        if (data.startsWith("toino")) {
+            turn = data.substring(5).toInt();
+            // Save the value to an integer variable
+        }
+    }
+  smoothDrive(topSpeed, turn);
 }
   

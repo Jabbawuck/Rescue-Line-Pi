@@ -1,12 +1,11 @@
 //[Pin Definition]
 //[Motors]
-int motorLPin1 = 0;
-int motorLPin2 = 1;
-String motorLSpeedPin = "A0";
-
-int motorRPin1 = 2;
-int motorRPin2 = 3;
-String motorRSpeedPin = "A1";
+int motorR1 = 7;
+int motorR2 = 8;
+int motorL1 = 9;
+int motorL2 = 10;
+int motorSpeedPinR = 5;
+int motorSpeedPinL = 6;
 
 //[Servos]
 
