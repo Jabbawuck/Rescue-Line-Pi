@@ -36,8 +36,29 @@ def track_line(image):
                 print("Line is in the center")
                 
     return image
+    
+imgBgr = cv2.imread('videostream.jpg')
+
+
+    
+def thresholding(img):
+    imgHsv = cv2.cvtColor(imgBgr, cv2.COLOR_BGR2HSV)
+
+    lower_black = np.array([0, 0, 0])
+    upper_black = np.array([10, 10, 10])
+    maskBlack = cv2.inRange(imgHsv,lower_black,upper_black)
+    return maskBlack
+    
+    
+def getLaneCurve(img):
+
+    imgThres = thresholding(img)
+
+    cv2.imshow('Thres',imgThres)
+    return None
 
 if __name__ == "__main__":
+	cap = cv2.VideoCapture('videostream.jpg')
 
 
 	picam.start()
@@ -45,8 +66,10 @@ if __name__ == "__main__":
 	while True:
 		picam.capture_file("videostream.jpg")
 		img = cv2.imread("videostream.jpg", -1)
+		success, img = cap.read()
+		getLaneCurve(img)
         
-		cv2.imshow("Output",img)
+		cv2.imshow("Output",imgBgr)
 		cv2.waitKey(1)
         
 	while True:
@@ -65,6 +88,8 @@ if __name__ == "__main__":
 
 
 cap = cv2.VideoCapture(0)
+
+
 
 
 cap.release()
