@@ -4,6 +4,9 @@ import numpy as np
 
 thres = 0.45 # Threshold to detect object
 
+resolution = (640, 480)
+frame_rate = 30
+
 picam = Picamera2()
 
 def track_line(image):
@@ -42,10 +45,10 @@ imgBgr = cv2.imread('videostream.jpg')
 
     
 def thresholding(img):
-    imgHsv = cv2.cvtColor(imgBgr, cv2.COLOR_BGR2HSV)
+    imgHsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     lower_black = np.array([0, 0, 0])
-    upper_black = np.array([10, 10, 10])
+    upper_black = np.array([87, 87, 87])
     maskBlack = cv2.inRange(imgHsv,lower_black,upper_black)
     return maskBlack
     
@@ -66,12 +69,12 @@ if __name__ == "__main__":
 	while True:
 		picam.capture_file("videostream.jpg")
 		img = cv2.imread("videostream.jpg", -1)
-		success, img = cap.read()
+		#success, img = cap.read()
 		getLaneCurve(img)
         
-		cv2.imshow("Output",imgBgr)
+		cv2.imshow("Output",img)
 		cv2.waitKey(1)
-        
+'''    
 	while True:
 		ret, frame = cap.read()
 		if not ret:
@@ -83,7 +86,7 @@ if __name__ == "__main__":
     
 		if cv2.waitKey(1) & OxFF == ord('q'):
 			break
-        
+        '''
         
 
 
