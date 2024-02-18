@@ -1,6 +1,7 @@
 import cv2
 from picamera2 import Picamera2
 import numpy as np
+import utlis
 
 thres = 0.45 # Threshold to detect object
 
@@ -41,21 +42,11 @@ def track_line(image):
     return image
     
 imgBgr = cv2.imread('videostream.jpg')
-
-
-    
-def thresholding(img):
-    imgHsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
-    lower_black = np.array([0, 0, 0])
-    upper_black = np.array([87, 87, 87])
-    maskBlack = cv2.inRange(imgHsv,lower_black,upper_black)
-    return maskBlack
     
     
 def getLaneCurve(img):
 
-    imgThres = thresholding(img)
+    imgThres = utlis.thresholding(img)
 
     cv2.imshow('Thres',imgThres)
     return None
