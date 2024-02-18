@@ -1,4 +1,4 @@
-from picamera import PiCamera
+from picamera import PiCamera2
 from time import sleep
 import cv2
 import numpy as np
@@ -21,14 +21,14 @@ camera.stop_recording()
 camera.stop_preview()"""
 
 """def list_images(images, cols = 2, rows = 5, cmap=None):
-    """
+    
     Display a list of images in a single figure with matplotlib.
         Parameters:
             images: List of np.arrays compatible with plt.imshow.
             cols (Default = 2): Number of columns in the figure.
             rows (Default = 5): Number of rows in the figure.
             cmap (Default = None): Used to display gray images.
-    """
+    
     plt.figure(figsize=(10, 11))
     for i, image in enumerate(images):
         plt.subplot(rows, cols, i+1)
