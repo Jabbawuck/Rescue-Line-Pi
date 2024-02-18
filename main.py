@@ -1,43 +1,41 @@
-import requests
+import serial
+import glob
+
 import time
 
-# Retrieve the user's IP address using the requests library
-response = requests.get('https://httpbin.org/ip')
-user_ip = response.json()['origin']
+# Function to detect Arduino port
+def detect_arduino_port():
+    # List all serial ports
+    ports = glob.glob('/dev/ttyUSB*')
+    # Iterate over the ports
+    for port in ports:
+        try:
+            # Try to open the port
+            ser = serial.Serial(port, 9600)
+            # If the port is open, close it and return the port
+            ser.close()
+            return port
+        except serial.SerialException:
+            # If the port is not open, continue to the next port
+            pass
+    # If no port is found, return None
+    return None
 
-# Define a function to simulate a motor's speed control
-def get_motor_speed(speed, direction):
-    # Adjust the motor speed within a specified range
-    # based on the current speed and direction
-    if direction == 'up':
-        # Increment the speed if it's within the range
-        if speed < 200:
-            speed += 1
-        else:
-            direction = 'down'
+# Get the Arduino port
+for x in range(10):
+    arduino_port = detect_arduino_port()
+
+    # If a port is found, open it
+    if arduino_port:
+        ser = serial.Serial(arduino_port, 9600)
+        print("Arduino found at", arduino_port)
+        time.sleep(3)
+        exit
+    # If no port is found, print an error message
     else:
-        # Decrement the speed if it's within the range
-        if speed > 0:
-            speed -= 1
-        else:
-            direction = 'up'
-
-    # Return the updated motor speed and direction
-    return speed, direction
-
-# Initialize the motor speed and direction
-speed = 0
-direction = 'up'
-
-# Continuously retrieve the motor speed and print it
+        print("Error: Arduino not found.")
+        time.sleep(1)
+message_to_send = "Hello, Arduino!"
 while True:
-    # Update the motor speed and direction by calling the get_motor_speed function
-    speed, direction = get_motor_speed(speed, direction)
-
-    # Print the motor speed and direction
-    print(f"Motor speed: {speed}")
-    print(f"Direction: {direction}")
-    message_to_send = speed
-
-    # Adjust the sleep time based on your requirements
-    time.sleep(0.01)
+    #Send the message from the main module over the serial port
+    ser.write(message_to_send.encode())
