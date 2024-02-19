@@ -109,7 +109,7 @@ def detect_arduino_port():
     for port in ports:
         try:
             # Try to open the port
-            ser = serial.Serial(port, 9600)
+            ser = serial.Serial(port, 115200)
             # If the port is open, close it and return the port
             ser.close()
             return port
@@ -125,11 +125,11 @@ def arduinoSerialCom():
 
         # If a port is found, open it
         if arduino_port:
-            ser = serial.Serial(arduino_port, 9600)
+            ser = serial.Serial(arduino_port, 115200)
             print("Arduino found at", arduino_port)
-            time.sleep(3)
-            return None
+            return arduino_port
         # If no port is found, print an error message
         else:
             print("Error: Arduino not found.")
             time.sleep(1)
+
