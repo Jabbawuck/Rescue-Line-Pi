@@ -1,10 +1,30 @@
 import cv2
 from picamera2 import Picamera2
 import numpy as np
+import serial
+import glob
+import time
 
 thres = 0.45  # Threshold to detect object
 
 picam = Picamera2()
+
+def detect_arduino_port():
+    # List all serial ports
+    ports = glob.glob('/dev/ttyUSB*')
+    # Iterate over the ports
+    for port in ports:
+        try:
+            # Try to open the port
+            ser = serial.Serial(port, 9600)
+            # If the port is open, close it and return the port
+            ser.close()
+            return port
+        except serial.SerialException:
+            # If the port is not open, continue to the next port
+            pass
+    # If no port is found, return None
+    return None
 
 def track_line(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -22,8 +42,10 @@ def track_line(image):
             image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
             if center_x < image_center_x:
                 print("Line is on the left")
+                ser.write(image_center_x)
             elif center_x > image_center_x:
                 print("Line is on the right")
+                ser.write(image_center_x)
             else:
                 print("Line is in the center")
 
@@ -43,30 +65,48 @@ def getLaneCurve(img):
 
 if __name__ == "__main__":
     picam.start()
-"""def list_images(images, cols = 2, rows = 5, cmap=None):
+    detect_arduino_port()
     
+    
+    
+    # Get the Arduino port
+for x in range(10):
+    arduino_port = detect_arduino_port()
+
+    # If a port is found, open it
+    if arduino_port:
+        ser = serial.Serial(arduino_port, 9600)
+        print("Arduino found at", arduino_port)
+        time.sleep(3)
+        exit
+    # If no port is found, print an error message
+    else:
+        print("Error: Arduino not found.")
+        time.sleep(1)
+        
+    fps_time = time.perf_counter()
+    counter = 0
+    fps =0
+    
+    camera_width = 640
+    camera_height = 480
+
     while True:
-        picam.capture_file("videostream.jpg")
-        img = cv2.imread("videostream.jpg", -1)
+        #picam.capture_file("videostream.jpg")
+        #img = cv2.imread("videostream.jpg", -1)
+        img = picam.capture_array()
+        img= cv2.resize(img, (camera_width, camera_height))
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
         getLaneCurve(img)
         result = track_line(img)
+        counter += 1
+        if time.perf_counter() - fps_time > 1:
+            fps = int(counter / (time.perf_counter() - fps_time))
+            fps_time = time.perf_counter()
+            counter = 0
+        cv2.putText(result, str(fps), (int(camera_width * 0.92), int(camera_height * 0.05)), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 255, 0),  1, cv2.LINE_AA)
         cv2.imshow('Line Tracking', result)
-        cv2.waitKey(1)
-    Display a list of images in a single figure with matplotlib.
-        Parameters:
-            images: List of np.arrays compatible with plt.imshow.
-            cols (Default = 2): Number of columns in the figure.
-            rows (Default = 5): Number of rows in the figure.
-            cmap (Default = None): Used to display gray images.
-    
-    plt.figure(figsize=(10, 11))
-    for i, image in enumerate(images):
-        plt.subplot(rows, cols, i+1)
-        #Use gray scale color map if there is only one channel
-        cmap = 'gray' if len(image.shape) == 2 else cmap
-        plt.imshow(image, cmap = cmap)
-        plt.xticks([])
-        plt.yticks([])
-    plt.tight_layout(pad=0, h_pad=0, w_pad=0)
-    plt.show()"""
-
+        
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+        
