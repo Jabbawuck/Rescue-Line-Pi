@@ -58,6 +58,24 @@ def thresholding(img):
     maskBlack = cv2.inRange(imgHsv, lower_black, upper_black)
     return maskBlack
 
+
+def track_green_color(frame):
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
+    lower_green = np.array([40, 40, 40])
+    upper_green = np.array([80, 255, 255])
+    
+    
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+    
+    res = cv2.bitwise_and(frame, frame, mask=mask)
+    
+    return res  
+
+if __name__ == "__main__":
+    main()
+
+
 def getLaneCurve(img):
     imgThres = thresholding(img)
     cv2.imshow('Thres', imgThres)
@@ -99,6 +117,8 @@ for x in range(10):
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
         getLaneCurve(img)
         result = track_line(img)
+        green_track_result = track_green_color(frame)
+        cv2.imshow('Green Color Tracking', green_track_result)
         counter += 1
         if time.perf_counter() - fps_time > 1:
             fps = int(counter / (time.perf_counter() - fps_time))
