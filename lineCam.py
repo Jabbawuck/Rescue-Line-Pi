@@ -35,7 +35,6 @@ def track_line(image):
     return image
   
 
-# Example usage
 
 
 

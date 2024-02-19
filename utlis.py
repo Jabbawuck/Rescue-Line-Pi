@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import time
+import serial
+import glob
  
 def thresholding(img):
     imgHsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -119,14 +121,14 @@ def detect_arduino_port():
 
 def arduinoSerialCom():
     for x in range(10):
-        arduino_port = utlis.detect_arduino_port()
+        arduino_port = detect_arduino_port()
 
         # If a port is found, open it
         if arduino_port:
             ser = serial.Serial(arduino_port, 9600)
             print("Arduino found at", arduino_port)
             time.sleep(3)
-            exit
+            return None
         # If no port is found, print an error message
         else:
             print("Error: Arduino not found.")
