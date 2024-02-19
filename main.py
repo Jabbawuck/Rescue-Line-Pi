@@ -1,7 +1,8 @@
 import serial
 import glob
-
 import time
+import RPi.GPIO as GPIO
+import subprocess
 
 # Function to detect Arduino port
 def detect_arduino_port():
@@ -21,6 +22,15 @@ def detect_arduino_port():
     # If no port is found, return None
     return None
 
+# Function to restart the script
+def restart_script(channel):
+    subprocess.call(['python3', '/home/gbg/Jabbawuck/Rescue-Line-Pi/main.py'])
+
+# Set up GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(18, GPIO.FALLING, callback=restart_script, bouncetime=300)
+
 # Get the Arduino port
 for x in range(10):
     arduino_port = detect_arduino_port()
@@ -35,7 +45,8 @@ for x in range(10):
     else:
         print("Error: Arduino not found.")
         time.sleep(1)
+
 message_to_send = "Hello, Arduino!"
 while True:
-    #Send the message from the main module over the serial port
+    # Send the message from the main module over the serial port
     ser.write(message_to_send.encode())
