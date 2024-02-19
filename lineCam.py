@@ -1,30 +1,13 @@
 import cv2
 from picamera2 import Picamera2
 import numpy as np
-import serial
-import glob
 import time
+import utlis
 
 thres = 0.45  # Threshold to detect object
 
 picam = Picamera2()
-
-def detect_arduino_port():
-    # List all serial ports
-    ports = glob.glob('/dev/ttyUSB*')
-    # Iterate over the ports
-    for port in ports:
-        try:
-            # Try to open the port
-            ser = serial.Serial(port, 9600)
-            # If the port is open, close it and return the port
-            ser.close()
-            return port
-        except serial.SerialException:
-            # If the port is not open, continue to the next port
-            pass
-    # If no port is found, return None
-    return None
+turn = 0
 
 def track_line(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -42,10 +25,10 @@ def track_line(image):
             image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
             if center_x < image_center_x:
                 print("Line is on the left")
-                ser.write(image_center_x)
+                turn -= 1
             elif center_x > image_center_x:
                 print("Line is on the right")
-                ser.write(image_center_x)
+                turn += 1
             else:
                 print("Line is in the center")
 
@@ -78,32 +61,13 @@ def getLaneCurve(img):
 
 if __name__ == "__main__":
     picam.start()
-    detect_arduino_port()
-    
-    
-    
-    # Get the Arduino port
-for x in range(10):
-    arduino_port = detect_arduino_port()
-
-    # If a port is found, open it
-    if arduino_port:
-        ser = serial.Serial(arduino_port, 9600)
-        print("Arduino found at", arduino_port)
-        time.sleep(3)
-        exit
-    # If no port is found, print an error message
-    else:
-        print("Error: Arduino not found.")
-        time.sleep(1)
-        
+    utlis.arduinoSerialCom()
     fps_time = time.perf_counter()
     counter = 0
     fps =0
     
     camera_width = 640
     camera_height = 480
-
     while True:
         #picam.capture_file("videostream.jpg")
         #img = cv2.imread("videostream.jpg", -1)
