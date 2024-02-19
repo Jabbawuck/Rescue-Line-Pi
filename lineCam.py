@@ -36,8 +36,7 @@ def track_line(image):
   
 
 # Example usage
-image_path = "example_image.jpg"
-detect_green_boxes(image_path)
+
 
 
 def thresholding(img):
@@ -51,25 +50,48 @@ def thresholding(img):
 def track_green_color(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     
-    lower_green = np.array([40, 40, 40])
-    upper_green = np.array([80, 255, 255])
+    lower_green = np.array([0, 0, 72])
+    upper_green = np.array([179, 255, 255])
     maskGreen = cv2.inRange(hsv, lower_green, upper_green)
-
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    for contour in contours:
-        x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    
-
     return maskGreen
     
    # res = cv2.bitwise_and(frame, frame, mask=mask)
     
     #return res  
 
+def track_green_box(image):
+    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #_, thresholded = cv2.threshold(gray, 50, 255, cv2.THRESH_BINARY_INV)
+
+    contours_green, _ = cv2.findContours(track_green_color, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours_green:
+        area = cv2.contourArea(contour)
+        if area > 100:
+            x, y, w, h = cv2.boundingRect(contour)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            center_x = x + w // 2
+            center_y = y + h // 2
+            image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
+            if center_x < image_center_x:
+                print("Box is on the left")
+                #turn -= 1
+            elif center_x > image_center_x:
+                print("Box is on the right")
+                #turn += 1
+            else:
+                print("no box detected")
+
+    return image
+
 def getLaneCurve(img):
     imgThres = thresholding(img)
     cv2.imshow('Thres', imgThres)
+    return None
+
+def getGreenBox(img):
+    imgGT = track_green_color(img)
+    cv2.imshow('Box', imgGT)
     return None
 
 if __name__ == "__main__":
@@ -97,8 +119,10 @@ if __name__ == "__main__":
             counter = 0
         cv2.putText(result, str(fps), (int(camera_width * 0.92), int(camera_height * 0.05)), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 255, 0),  1, cv2.LINE_AA)
         cv2.imshow('Line Tracking', result)
-        green_track_result = track_green_color(img)
-        cv2.imshow('Green Color Tracking', green_track_result)
+        getGreenBox(img)
+        result = track_green_box
+        #green_track_result = track_green_color(img)
+        cv2.imshow('Green Color Tracking', result)
         
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
