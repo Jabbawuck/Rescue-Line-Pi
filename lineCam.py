@@ -1,34 +1,4 @@
 import cv2
-import RPi.GPIO as GPIO
-import os
-import subprocess
-
-# Set up GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-# Function to start and restart lineCam.py
-def start_line_cam(channel):
-    # Add your code here to start or restart lineCam.py
-
-    # Function to start and restart lineCam.py
-    # Check if lineCam.py is already running
-    process_name = "lineCam.py"
-    output = subprocess.check_output(["pgrep", process_name])
-    pids = output.decode().split()
-    
-    if len(pids) > 0:
-        # LineCam.py is already running, restart it
-        for pid in pids:
-            os.kill(int(pid), 9)
-        
-        # Start lineCam.py
-        subprocess.Popen(["python3", "/home/gbg/Jabbawuck/Rescue-Line-Pi/lineCam.py"])
-    pass
-
-# Add event detection for button press
-GPIO.add_event_detect(18, GPIO.FALLING, callback=start_line_cam, bouncetime=300)
-
 from picamera2 import Picamera2
 import numpy as np
 import time
