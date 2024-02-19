@@ -1,5 +1,6 @@
 import serial
 import glob
+import lineCam
 
 import time
 
@@ -38,4 +39,4 @@ for x in range(10):
 message_to_send = "Hello, Arduino!"
 while True:
     #Send the message from the main module over the serial port
-    ser.write(message_to_send.encode())
+    ser.write(lineCam.turn)

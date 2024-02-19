@@ -5,6 +5,7 @@ import numpy as np
 thres = 0.45  # Threshold to detect object
 
 picam = Picamera2()
+turn = 0
 
 def track_line(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -22,8 +23,10 @@ def track_line(image):
             image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
             if center_x < image_center_x:
                 print("Line is on the left")
+                turn -= 1
             elif center_x > image_center_x:
                 print("Line is on the right")
+                turn += 1
             else:
                 print("Line is in the center")
 
