@@ -112,7 +112,7 @@ for x in range(10):
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
         getLaneCurve(img)
         result = track_line(img)
-        green_track_result = track_green_color(frame)
+        green_track_result = track_green_color(img)
         cv2.imshow('Green Color Tracking', green_track_result)
         counter += 1
         if time.perf_counter() - fps_time > 1:
