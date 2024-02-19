@@ -25,7 +25,13 @@ def track_line(image):
             center_x = x + w // 2
             center_y = y + h // 2
             image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
-            if center_x < image_center_x:
+            if center_x > image_center_x - 50 and center_x < image_center_x + 50:
+                if turn > 0:
+                    turn -= 1
+                if turn < 90:
+                    turn += 1 
+                print("Line is in the center    " + str(turn))
+            elif center_x < image_center_x:
                 if turn > -90:
                     turn -= 1
                 print("Line is on the left      " + str(turn))
@@ -33,16 +39,9 @@ def track_line(image):
                 if turn < 90:
                     turn += 1   
                 print("Line is on the right     " + str(turn))
-            elif center_x > image_center_x - 50 or center_x <        image_center_x + 50:
-                if turn > 0:
-                    turn -= 1
-                if turn < 90:
-                    turn += 1 
-                print("Line is in the center    " + str(turn))
-
+            
     return image
   
-
 
 
 
@@ -57,8 +56,8 @@ def thresholding(img):
 def track_green_color(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     
-    lower_green = np.array([0, 0, 72])
-    upper_green = np.array([179, 255, 255])
+    lower_green = np.array([20, 80, 60])
+    upper_green = np.array([80, 255, 255])
     maskGreen = cv2.inRange(hsv, lower_green, upper_green)
     return maskGreen
     
@@ -66,20 +65,20 @@ def track_green_color(img):
     
     #return res  
 
-def track_green_box(image):
+def track_green_box(img):
     #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     #_, thresholded = cv2.threshold(gray, 50, 255, cv2.THRESH_BINARY_INV)
 
-    contours_green, _ = cv2.findContours(track_green_color, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours_green, _ = cv2.findContours(track_green_color(img), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for contour in contours_green:
         area = cv2.contourArea(contour)
-        if area > 100:
+        if area > 10:
             x, y, w, h = cv2.boundingRect(contour)
-            cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             center_x = x + w // 2
             center_y = y + h // 2
-            image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
+            image_center_x, _ = img.shape[1] // 2, img.shape[0] // 2
             if center_x < image_center_x:
                 print("Box is on the left")
                 #turn -= 1
@@ -89,7 +88,7 @@ def track_green_box(image):
             else:
                 print("no box detected")
 
-    return image
+    return img
 
 def getLaneCurve(img):
     imgThres = thresholding(img)
@@ -115,7 +114,8 @@ if __name__ == "__main__":
         #picam.capture_file("videostream.jpg")
         #img = cv2.imread("videostream.jpg", -1)
         img = picam.capture_array()
-        img= cv2.resize(img, (camera_width, camera_height))
+        original_img = img
+        img = cv2.resize(img, (camera_width, camera_height))
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
         getLaneCurve(img)
         result = track_line(img)
@@ -129,10 +129,10 @@ if __name__ == "__main__":
         cv2.imshow('Line Tracking', result)
         sendMessage = "toino" + str(turn)
         ser.write(sendMessage.encode())
-        getGreenBox(img)
-        result = track_green_box
+        getGreenBox(original_img)
+        green_result = track_green_box(original_img)
         #green_track_result = track_green_color(img)
-        cv2.imshow('Green Color Tracking', result)
+        cv2.imshow('Green Color Tracking', green_result)
         
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
