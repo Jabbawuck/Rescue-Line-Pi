@@ -1,12 +1,6 @@
 ////////////////////[Libraries]////////////////////
-//#include <SPI.h>
-//#include <Wire.h>
-//#include <Adafruit_GFX.h>
-
-//für BNO055 Sensor 
-//#include <Adafruit_Sensor.h>
-//#include <Adafruit_BNO055.h>
-//#include <utility/imumaths.h>
+#include <SPI.h>
+#include <Wire.h>
 /////////////////////////////////////////////////////
 //motorenpins
 int motorR1 = 7;
@@ -17,7 +11,7 @@ int motorSpeedPinR = 5;
 int motorSpeedPinL = 6;
 
 int defaultSpeed = 50; //Geschwindigkeit 0% bis 100%
-int topSpeed = 200; //Maximalgeschwindigkeit
+int topSpeed = 150; //Maximalgeschwindigkeit
 /////////////////////////////////////////////////////
 //[allg. Motoren]/// 
 
@@ -102,32 +96,13 @@ void motorentest(){
   left(90, defaultSpeed);
   backward(1000, defaultSpeed);
 }
-//////////////////////////////////////////////  
-//[allg. Gyro]//
-/*
-void readOrientation(){
-  sensors_event_t orientationData , angVelocityData , linearAccelData; //Winkeldaten
-  bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
 
-  yawAngle =orientationData.orientation.x;
-  pitchAngle = map(orientationData.orientation.y, 100, 0, -100, 0);
-  rollAngle = orientationData.orientation.z;
-
-  bno.getEvent(&linearAccelData, Adafruit_BNO055::VECTOR_LINEARACCEL);//Beschleunigungsdaten
-  xAccel = linearAccelData.acceleration.x * 100;
-  yAccel = linearAccelData.acceleration.y * 100;
-  zAccel = linearAccelData.acceleration.z * 100;
-
-}*/
-///////////////////////////////////////////////
-int turn = 0;
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
+  Serial.write("Arduino Serial opened");
   startMotors();
-  //!bno.begin();
-
 }
-
+int turn = 0;
 void loop(){
   //readOrientation();
   if (Serial.available() > 0) {
@@ -135,8 +110,11 @@ void loop(){
         if (data.startsWith("toino")) {
             turn = data.substring(5).toInt();
             // Save the value to an integer variable
+            return turn;
         }
+        return turn;
     }
   smoothDrive(topSpeed, turn);
-  }
+  //Serial.println("test123");
+}
   
