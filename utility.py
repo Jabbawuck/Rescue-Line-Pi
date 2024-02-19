@@ -4,6 +4,8 @@ import time
 import serial
 import glob
 
+turn = 0
+
 def detect_arduino_port():
     """
     Detects the Arduino port by listing all the serial ports and trying to open each port.
@@ -36,17 +38,56 @@ def arduinoSerialCom():
             print("Error: Arduino not found.")
             time.sleep(1)
 
-def thresholding(img):
+#Linetracking
+def track_line(image):
+    global turn
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresholded = cv2.threshold(gray, 50, 255, cv2.THRESH_BINARY_INV)
+
+    contours, _ = cv2.findContours(thresholded, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours:
+        area = cv2.contourArea(contour)
+        if area > 100:
+            x, y, w, h = cv2.boundingRect(contour)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            center_x = x + w // 2
+            center_y = y + h // 2
+            image_center_x, _ = image.shape[1] // 2, image.shape[0] // 2
+            if center_x > image_center_x - 50 and center_x < image_center_x + 50:
+                if turn > 0:
+                    turn -= 1
+                if turn < 90:
+                    turn += 1
+                print("Line is in the center    " + str(turn))
+            elif center_x < image_center_x:
+                if turn > -90:
+                    turn -= 1
+                print("Line is on the left      " + str(turn))
+            elif center_x > image_center_x:
+                if turn < 90:
+                    turn += 1
+                print("Line is on the right     " + str(turn))
+            
+    return image
+
+def thresholding(input_image):
     """
     Performs thresholding on the input image.
     Converts the image to HSV color space and applies a black color range threshold.
     Returns the thresholded image.
     """
-    imgHsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    imgHsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV)
     lower_black = np.array([0, 0, 0])
     upper_black = np.array([87, 87, 87])
     maskBlack = cv2.inRange(imgHsv, lower_black, upper_black)
     return maskBlack
+
+def showBlackMask(img):
+    imgThres = thresholding(img)
+    cv2.imshow('Thres', imgThres)
+    return None
+
 
 
 #Green dot tracking methods
