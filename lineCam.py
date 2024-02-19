@@ -33,6 +33,12 @@ def track_line(image):
                 print("Line is in the center")
 
     return image
+  
+
+# Example usage
+image_path = "example_image.jpg"
+detect_green_boxes(image_path)
+
 
 def thresholding(img):
     imgHsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -48,6 +54,13 @@ def track_green_color(img):
     lower_green = np.array([40, 40, 40])
     upper_green = np.array([80, 255, 255])
     maskGreen = cv2.inRange(hsv, lower_green, upper_green)
+
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    
+
     return maskGreen
     
    # res = cv2.bitwise_and(frame, frame, mask=mask)
