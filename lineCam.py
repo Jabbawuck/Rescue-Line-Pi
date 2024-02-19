@@ -59,22 +59,17 @@ def thresholding(img):
     return maskBlack
 
 
-def track_green_color(frame):
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+def track_green_color(img):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     
     lower_green = np.array([40, 40, 40])
     upper_green = np.array([80, 255, 255])
+    maskGreen = cv2.inRange(hsv, lower_green, upper_green)
+    return maskGreen
     
+   # res = cv2.bitwise_and(frame, frame, mask=mask)
     
-    mask = cv2.inRange(hsv, lower_green, upper_green)
-    
-    res = cv2.bitwise_and(frame, frame, mask=mask)
-    
-    return res  
-
-if __name__ == "__main__":
-    main()
-
+    #return res  
 
 def getLaneCurve(img):
     imgThres = thresholding(img)
