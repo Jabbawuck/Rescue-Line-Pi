@@ -112,8 +112,7 @@ for x in range(10):
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
         getLaneCurve(img)
         result = track_line(img)
-        green_track_result = track_green_color(img)
-        cv2.imshow('Green Color Tracking', green_track_result)
+        
         counter += 1
         if time.perf_counter() - fps_time > 1:
             fps = int(counter / (time.perf_counter() - fps_time))
@@ -121,6 +120,8 @@ for x in range(10):
             counter = 0
         cv2.putText(result, str(fps), (int(camera_width * 0.92), int(camera_height * 0.05)), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 255, 0),  1, cv2.LINE_AA)
         cv2.imshow('Line Tracking', result)
+        green_track_result = track_green_color(img)
+        cv2.imshow('Green Color Tracking', green_track_result)
         
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
