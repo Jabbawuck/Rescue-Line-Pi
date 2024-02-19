@@ -35,9 +35,7 @@ def track_line(image):
     return image
   
 
-# Example usage
-image_path = "example_image.jpg"
-detect_green_boxes(image_path)
+
 
 
 def thresholding(img):
@@ -47,7 +45,7 @@ def thresholding(img):
     maskBlack = cv2.inRange(imgHsv, lower_black, upper_black)
     return maskBlack
 
-
+'''
 def track_green_color(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     
@@ -58,7 +56,7 @@ def track_green_color(img):
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
     
 
     return maskGreen
@@ -66,7 +64,7 @@ def track_green_color(img):
    # res = cv2.bitwise_and(frame, frame, mask=mask)
     
     #return res  
-
+'''
 def getLaneCurve(img):
     imgThres = thresholding(img)
     cv2.imshow('Thres', imgThres)
@@ -97,8 +95,8 @@ if __name__ == "__main__":
             counter = 0
         cv2.putText(result, str(fps), (int(camera_width * 0.92), int(camera_height * 0.05)), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 255, 0),  1, cv2.LINE_AA)
         cv2.imshow('Line Tracking', result)
-        green_track_result = track_green_color(img)
-        cv2.imshow('Green Color Tracking', green_track_result)
+        #green_track_result = track_green_color(img)
+        #cv2.imshow('Green Color Tracking', green_track_result)
         
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
