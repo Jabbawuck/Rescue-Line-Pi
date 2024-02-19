@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
  
 def thresholding(img):
     imgHsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -97,3 +98,36 @@ def stackImages(scale,imgArray):
         hor= np.hstack(imgArray)
         ver = hor
     return ver
+
+# Function to detect Arduino port
+def detect_arduino_port():
+    # List all serial ports
+    ports = glob.glob('/dev/ttyUSB*')
+    # Iterate over the ports
+    for port in ports:
+        try:
+            # Try to open the port
+            ser = serial.Serial(port, 9600)
+            # If the port is open, close it and return the port
+            ser.close()
+            return port
+        except serial.SerialException:
+            # If the port is not open, continue to the next port
+            pass
+    # If no port is found, return None
+    return None
+
+def arduinoSerialCom():
+    for x in range(10):
+        arduino_port = utlis.detect_arduino_port()
+
+        # If a port is found, open it
+        if arduino_port:
+            ser = serial.Serial(arduino_port, 9600)
+            print("Arduino found at", arduino_port)
+            time.sleep(3)
+            exit
+        # If no port is found, print an error message
+        else:
+            print("Error: Arduino not found.")
+            time.sleep(1)
