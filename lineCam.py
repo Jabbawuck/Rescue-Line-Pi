@@ -1,5 +1,5 @@
 import cv2
-from picamera2 import Picamera2
+from picamera2 import Picamera2 as picam
 import numpy as np
 import time
 import utility
@@ -8,7 +8,7 @@ import comUtil
 
 thres = 0.45  # Threshold to detect object
 
-picam = Picamera2()
+#picam = Picamera2()
 turn = 0
 
 def main():
