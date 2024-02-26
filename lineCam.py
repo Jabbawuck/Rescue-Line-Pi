@@ -4,7 +4,8 @@ import numpy as np
 import time
 import utility
 import serial
-import comUtil
+#import comUtil
+import motorDriver
 
 thres = 0.45  # Threshold to detect object
 
@@ -16,7 +17,7 @@ def main():
     Main function to start the line tracking process.
     """
     picam.start()
-    utility.arduinoSerialCom()
+    #utility.arduinoSerialCom()
     ser = serial.Serial(utility.detect_arduino_port(), 115200)
     fps_time = time.perf_counter()
     counter = 0
@@ -50,8 +51,8 @@ def main():
         cv2.imshow('Line Tracking', result)
         
         # Send message to Arduino
-        sendMessage = "toino" + str(turn)
-        comUtil.sendToArduino(sendMessage)
+        #sendMessage = "toino" + str(turn)
+        #comUtil.sendToArduino(sendMessage)
         
         # Show green mask on the original image
         utility.showGreenMask(original_img)
@@ -66,4 +67,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    motorDriver.driveLoopCallable(10, utility.track_line())
         

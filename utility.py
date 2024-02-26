@@ -69,7 +69,7 @@ def track_line(image):
                     turn += 1
                 print("Line is on the right     " + str(turn))
             
-    return image
+    return image, center_x
 
 def thresholding(input_image):
     """
